@@ -2,7 +2,7 @@ package dijkstra;
 
 import java.util.ArrayList;
 
-public class direccion {
+public class Direccion {
 
 	private double distancia_minima;
 	private ArrayList<Integer> ruta = new ArrayList<Integer>();

@@ -1,6 +1,6 @@
 package dijkstra;
 
-public class point {
+public class Point {
 
 	private double distancia;
 	private int desde_donde;

@@ -7,11 +7,10 @@ public class Grafo {
 
 	private Vertice[] vertices;
 	private double[][] matriz_adyacencia;
-	
 	private ArrayList<Integer> orden;
-	private point resultados[][];
-	private direccion direcciones[];
-	private direccion direcciones_copy[];
+	private Point resultados[][];
+	private Direccion direcciones[];
+	private Direccion direcciones_copy[];
 	
 	public Grafo(Vertice[] vertices, double[][] matriz_adyacencia){
 		this.vertices = vertices;
@@ -19,21 +18,21 @@ public class Grafo {
 		
 		orden = new ArrayList<Integer>();
 		
-		resultados=new point[vertices.length][vertices.length];
+		resultados=new Point[vertices.length][vertices.length];
 		for(int j=0;j<vertices.length;j++)
 			for(int k=0;k<vertices.length;k++)
-				resultados[j][k]= new point();
+				resultados[j][k]= new Point();
 		
-		direcciones=new direccion[vertices.length-1];
+		direcciones=new Direccion[vertices.length-1];
 		for(int j=0;j<vertices.length-1;j++)
-			direcciones[j]= new direccion();
+			direcciones[j]= new Direccion();
 		
-		direcciones_copy=new direccion[vertices.length-1];
+		direcciones_copy=new Direccion[vertices.length-1];
 		for(int j=0;j<vertices.length-1;j++)
-			direcciones_copy[j]= new direccion();
+			direcciones_copy[j]= new Direccion();
 	}
 	
-	public direccion camino_mas_corto(int id_vertice_origen, int id_vertice_destino){
+	public Direccion camino_mas_corto(int id_vertice_origen, int id_vertice_destino){
 		for(int i = 0; i < matriz_adyacencia.length; i++){
 			if(i == 0){
 				
@@ -155,17 +154,7 @@ public class Grafo {
 			}
 		}
 		
-		/*direccion ejemplo = new direccion();
-		for(int i = 0; i < direcciones.length; i++){
-			if(direcciones[i].getLastRuta() == id_vertice_destino){
-				ejemplo.setDistancia(direcciones[i].getDistancia());
-				ejemplo.setRutaCompleta(direcciones[i].getRuta());
-			}
-		}
-		
-		return ejemplo;*/
-		
-		direccion ejemplo = new direccion();
+		Direccion ejemplo = new Direccion();
 		for(int i = 0; i < direcciones_copy.length; i++){
 			if(direcciones_copy[i].getLastRuta() == id_vertice_destino){
 				ejemplo.setDistancia(direcciones_copy[i].getDistancia());
@@ -177,7 +166,7 @@ public class Grafo {
 		
 	}
 	
-	public direccion find_direccion(int id_vertice_origen, int id_vertice_destino, direccion direcciones[]){
+	public Direccion find_direccion(int id_vertice_origen, int id_vertice_destino, Direccion direcciones[]){
 		for(int i = 0; i < direcciones.length; i++){
 			if(direcciones[i].getLastRuta() == id_vertice_destino){
 				return direcciones[i];
