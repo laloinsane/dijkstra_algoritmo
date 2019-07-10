@@ -153,7 +153,7 @@ public class ppal {
 		System.out.print("Indices:\n\n"+ a.toString_indices() +"\n");
 		System.out.print("Grafo:\n\n"+ a.toString_grafo() +"\n");
 		
-		direccion test = a.camino_mas_corto(3, 0);
+		Direccion test = a.camino_mas_corto(3, 0);
 		
 		System.out.print("Orden:\n\n"+ a.toString_orden() +"\n");
 		System.out.print("Grafo Resultante:\n\n"+ a.toString_resultados() +"\n");
