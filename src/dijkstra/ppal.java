@@ -13,7 +13,35 @@ public class ppal {
 		// TODO Auto-generated method stub
 		
 		List<Nodo> lista_nodos = new ArrayList<Nodo>();
+		
+		ArrayList<Conexion> t0 = new ArrayList<Conexion>();
+		Conexion t0_c1 = new Conexion(2, 0.089931);
+		t0.add(t0_c1);
+		Conexion t0_c2 = new Conexion(3, 0.119069);
+		t0.add(t0_c2);
+		
+		Nodo t0_n1 = new Nodo(1, 1, -41.489356, -72.89595, t0);
+		lista_nodos.add(t0_n1);
+		
+		
+		ArrayList<Conexion> t1 = new ArrayList<Conexion>();
+		Conexion t1_c1 = new Conexion(1, 0.089931);
+		t1.add(t1_c1);
+		
+		Nodo t1_n1 = new Nodo(2, 1, -41.490072, -72.895757, t1);
+		lista_nodos.add(t1_n1);
+		
+		
+		ArrayList<Conexion> t2 = new ArrayList<Conexion>();
+		Conexion t2_c1 = new Conexion(1, 0.119069);
+		t2.add(t2_c1);
+		
+		Nodo t2_n1 = new Nodo(3, 1, -41.490168, -72.895816, t2);
+		lista_nodos.add(t2_n1);
 
+				
+		/*List<Nodo> lista_nodos = new ArrayList<Nodo>();
+		
 		
 		ArrayList<Conexion> t0 = new ArrayList<Conexion>();
 		Conexion t0_c1 = new Conexion(1, 16.0);
@@ -113,7 +141,7 @@ public class ppal {
 		t7.add(t7_c3);
 		
 		Nodo t7_n1 = new Nodo(7, 3, -41.7, -72.7, t7);
-		lista_nodos.add(t7_n1);
+		lista_nodos.add(t7_n1);*/
 		
 		
 		Vertice[] vertices = new Vertice[lista_nodos.size()];
@@ -151,16 +179,22 @@ public class ppal {
 		Grafo a = new Grafo(vertices, matriz_adyacencia);
 		
 		System.out.print("Indices:\n\n"+ a.toString_indices() +"\n");
-		System.out.print("Grafo:\n\n"+ a.toString_grafo() +"\n");
+		System.out.print("Matriz Inicial:\n\n"+ a.toString_matriz_inicial() +"\n");
 		
-		Direccion test = a.camino_mas_corto(3, 0);
+		Direccion test = a.camino_mas_corto(1, 2);
+		//Direccion test = a.camino_mas_corto(1, 7);
 		
-		System.out.print("Orden:\n\n"+ a.toString_orden() +"\n");
-		System.out.print("Grafo Resultante:\n\n"+ a.toString_resultados() +"\n");
-		System.out.print("Distancia:\n\n"+ test.getDistancia() +"\n\n");
-		System.out.print("Ruta:\n\n"+ test.getRuta() +"\n\n");
-		System.out.print("Direcciones:\n\n"+ a.toString_direcciones() +"\n");
-		System.out.print("Direcciones copy:\n\n"+ a.toString_direcciones_copy() +"\n");
-	}
+		
+		if(test.getDistancia() == 0.0 && test.getRuta().isEmpty()){
+			System.out.print("No se pudo encontrar el camino más corto, verifique si el "+'"'+"vértice de origen"+'"'+" y el "+'"'+"vértice de fin"+'"'+" están correctos.\n\n");
+		}else{
+			System.out.print("Orden:\n\n"+ a.toString_orden() +"\n");
+			System.out.print("Grafo Resultante:\n\n"+ a.toString_resultados() +"\n");
+			System.out.print("Direcciones:\n\n"+ a.toString_direcciones() +"\n");
+			
+			System.out.print("Distancia:\n\n"+ test.getDistancia() +"\n\n");
+			System.out.print("Ruta:\n\n"+ test.getRuta() +"\n\n");
+			}
+		}
 
 }
