@@ -1,178 +1,138 @@
 package dijkstra;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Grafo {
 
 	private Vertice[] vertices;
-	private double[][] matriz_adyacencia;
+	private double[][] matriz_inicial;
+	private Point[][] resultados;
 	private ArrayList<Integer> orden;
-	private Point resultados[][];
 	private Direccion direcciones[];
-	private Direccion direcciones_copy[];
 	
-	public Grafo(Vertice[] vertices, double[][] matriz_adyacencia){
+	public Grafo(Vertice[] vertices, double[][] matriz_inicial){
 		this.vertices = vertices;
-		this.matriz_adyacencia = matriz_adyacencia;
-		
+		this.matriz_inicial = matriz_inicial;
 		orden = new ArrayList<Integer>();
-		
-		resultados=new Point[vertices.length][vertices.length];
-		for(int j=0;j<vertices.length;j++)
-			for(int k=0;k<vertices.length;k++)
-				resultados[j][k]= new Point();
-		
-		direcciones=new Direccion[vertices.length-1];
-		for(int j=0;j<vertices.length-1;j++)
-			direcciones[j]= new Direccion();
-		
-		direcciones_copy=new Direccion[vertices.length-1];
-		for(int j=0;j<vertices.length-1;j++)
-			direcciones_copy[j]= new Direccion();
 	}
-	
+		
 	public Direccion camino_mas_corto(int id_vertice_origen, int id_vertice_destino){
-		for(int i = 0; i < matriz_adyacencia.length; i++){
-			if(i == 0){
-				
-				for(int fila = 0; fila < vertices.length; fila++)
-					if(vertices[fila].getId_vertice() == id_vertice_origen)
-						id_vertice_origen = fila;
-				
-				orden.add(id_vertice_origen);
-				
-				double infinito = 1000000;
-				int position_start = 100;
-				int position_end = 100;
-				
-				for(int j=0;j<matriz_adyacencia.length;j++){
-					if(id_vertice_origen == j){
-						resultados[i][j].setDistancia(88);
-						resultados[i][j].setDesde_donde(88);
-					}else{
-						if(matriz_adyacencia[id_vertice_origen][j] == 0.0){
-							resultados[i][j].setDistancia(99);
-							resultados[i][j].setDesde_donde(99);
-						}else{
-							if(matriz_adyacencia[id_vertice_origen][j] != 0.0){
-								resultados[i][j].setDistancia(matriz_adyacencia[id_vertice_origen][j]);
-								resultados[i][j].setDesde_donde(id_vertice_origen);
-								
-								if(resultados[i][j].getDistancia() < infinito){
-									infinito = resultados[i][j].getDistancia();
-									position_start = resultados[i][j].getDesde_donde();
-									position_end = j;
-								}
-								
-							}
-						}
-					}
+		if(existeId(id_vertice_origen) == true && existeId(id_vertice_destino) == true && id_vertice_origen != id_vertice_destino){
+			for(int fila = 0; fila < vertices.length; fila++){
+				if(vertices[fila].getId_vertice() == id_vertice_origen){
+					id_vertice_origen = fila;
 				}
-				
-				direcciones[i].setDistancia(infinito);
-				direcciones[i].setRuta(position_start);
-				direcciones[i].setRuta(position_end);
-				
-				direcciones_copy[i].setDistancia(infinito);
-				direcciones_copy[i].setRuta(vertices[position_start].getId_vertice());
-				direcciones_copy[i].setRuta(vertices[position_end].getId_vertice());
+			}
 			
-			}else{
-				if(i < matriz_adyacencia.length-1){
-					orden.add(direcciones[i - 1].getLastRuta());
+			resultados = new Point[vertices.length-1][vertices.length];
+			orden.add(id_vertice_origen);
+			direcciones = new Direccion[vertices.length-1];
+			
+			for(int i=0; i<vertices.length-1; i++){
+				Point point = new Point();
+				int posicion_distancia_mas_baja = -1;
+				
+				for(int j=0; j<vertices.length; j++){
+					resultados[i][j]= new Point();
 					
-					double infinito = 100;
-					int position_start = 100;
-					int position_end = 100;
-					int position_actual = 100;
-					
-					for(int j=0;j<matriz_adyacencia.length;j++){
-						if(orden.contains(j)){
-							resultados[i][j].setDistancia(88);
-							resultados[i][j].setDesde_donde(88);
+					//si ArrayLis orden contiene j
+					if(orden.contains(j)){
+						resultados[i][j].setDistancia(0);
+					}else{
+						//si el valor[S][j] matriz_inicial es 0 && orden != 1 && != infinito
+						if(matriz_inicial[orden.get(orden.size()-1)][j] == 0.0){
+							if(orden.size() != 1 && resultados[i-1][j].getDistancia() != Double.POSITIVE_INFINITY){
+								resultados[i][j].setValues(resultados[i-1][j].getDistancia(), resultados[i-1][j].getDesde_donde());
+								if(resultados[i][j].getDistancia() < point.getDistancia()){
+									point.setValues(resultados[i][j].getDistancia(), resultados[i][j].getDesde_donde());
+									posicion_distancia_mas_baja=j;
+								}
+							}	
 						}else{
-							if(matriz_adyacencia[direcciones[i - 1].getLastRuta()][j] == 0.0){
-								resultados[i][j].setDistancia(resultados[i-1][j].getDistancia());
-								resultados[i][j].setDesde_donde(resultados[i-1][j].getDesde_donde());
-								if(resultados[i][j].getDistancia() < infinito){
-									infinito = resultados[i][j].getDistancia();
-									position_end = j;
-									position_actual = resultados[i][j].getDesde_donde();
+							//si el valor[S][j] matriz_inicial es != 0
+							if(orden.size() == 1){
+								resultados[i][j].setValues(matriz_inicial[orden.get(orden.size()-1)][j], orden.get(orden.size()-1));
+								if(resultados[i][j].getDistancia() < point.getDistancia()){
+									point.setValues(resultados[i][j].getDistancia(), resultados[i][j].getDesde_donde());
+									posicion_distancia_mas_baja=j;
 								}
 							}else{
-								if(matriz_adyacencia[direcciones[i - 1].getLastRuta()][j] != 0.0){
-									if(direcciones[i - 1].getDistancia()+matriz_adyacencia[direcciones[i - 1].getLastRuta()][j] > resultados[i-1][j].getDistancia()){
-										resultados[i][j].setDistancia(resultados[i-1][j].getDistancia());
-										resultados[i][j].setDesde_donde(resultados[i-1][j].getDesde_donde());
-										
-										if(resultados[i][j].getDistancia() < infinito){
-											infinito = resultados[i][j].getDistancia();
-											position_end = j;
-											position_actual = resultados[i][j].getDesde_donde();
-										}
-									}else{
-										resultados[i][j].setDistancia(direcciones[i - 1].getDistancia()+matriz_adyacencia[direcciones[i - 1].getLastRuta()][j]);
-										resultados[i][j].setDesde_donde(direcciones[i - 1].getLastRuta());
-										if(resultados[i][j].getDistancia() < infinito){
-											infinito = resultados[i][j].getDistancia();
-											position_end = j;
-											position_actual = resultados[i][j].getDesde_donde();
-										}
+								if(matriz_inicial[orden.get(orden.size()-1)][j]+lastDistanciaMinima() < resultados[i-1][j].getDistancia()){
+									resultados[i][j].setValues(matriz_inicial[orden.get(orden.size()-1)][j]+lastDistanciaMinima(), orden.get(orden.size()-1));
+									if(resultados[i][j].getDistancia() < point.getDistancia()){
+										point.setValues(resultados[i][j].getDistancia(), resultados[i][j].getDesde_donde());	
+										posicion_distancia_mas_baja=j;
 									}
-								}	
+								}else{
+									resultados[i][j].setValues(resultados[i-1][j].getDistancia(), resultados[i-1][j].getDesde_donde());
+									if(resultados[i][j].getDistancia() < point.getDistancia()){
+										point.setValues(resultados[i][j].getDistancia(), resultados[i][j].getDesde_donde());
+										posicion_distancia_mas_baja=j;
+									}
+								}
 							}
 						}
 					}
-					direcciones[i].setDistancia(infinito);
-					
-					direcciones_copy[i].setDistancia(infinito);
-					
-					boolean incorporo_ruta = false;
-						for(int x = 0; x < i; x++){
-							if(direcciones[x].getLastRuta() == position_actual){
-								ArrayList<Integer> ruta_nueva = direcciones[x].getRuta();
-								
-								ArrayList<Integer> ruta_nueva_x = direcciones_copy[x].getRuta();
-								 for (int y = 0; y <= ruta_nueva.size() - 1; y++) {
-									 direcciones[i].setRuta(ruta_nueva.get(y));
-									 
-									 direcciones_copy[i].setRuta(ruta_nueva_x.get(y));
-								 }
-								 incorporo_ruta = true;
-							}
-						}
-						if(incorporo_ruta == false){
-							direcciones[i].setRuta(position_actual);
-							
-							direcciones_copy[i].setRuta(vertices[position_actual].getId_vertice());
-						}
-					direcciones[i].setRuta(position_end);
-					
-					direcciones_copy[i].setRuta(vertices[position_end].getId_vertice());
+				}
+				orden.add(posicion_distancia_mas_baja);
+				setDireccion(point, i, posicion_distancia_mas_baja);
+			}
+			
+			Direccion result = new Direccion();
+			for(int i = 0; i < direcciones.length; i++){
+				if(direcciones[i].getLastRuta() == id_vertice_destino){
+					result.setDistancia(direcciones[i].getDistancia());
+					result.setRutaCompleta(direcciones[i].getRuta());
+				}
+			}
+			return result;
+		}else{
+			Direccion result = new Direccion();
+			return result;
+		}
+	}
+	
+	public void setDireccion(Point point, int i, int posicion_distancia_mas_baja){
+		boolean agregar_ruta = false;
+		for(int x=0; x<direcciones.length && agregar_ruta==false;x++){
+			if(direcciones[x] != null){
+				if(direcciones[x].getLastRuta() == vertices[point.getDesde_donde()].getId_vertice()){
+				direcciones[i]=new Direccion();
+					ArrayList<Integer> ruta = direcciones[x].getRuta();
+					for (int y = 0; y < ruta.size(); y++) {
+						direcciones[i].setRuta(ruta.get(y));
+					}
+					agregar_ruta = true;
 				}
 			}
 		}
 		
-		Direccion ejemplo = new Direccion();
-		for(int i = 0; i < direcciones_copy.length; i++){
-			if(direcciones_copy[i].getLastRuta() == id_vertice_destino){
-				ejemplo.setDistancia(direcciones_copy[i].getDistancia());
-				ejemplo.setRutaCompleta(direcciones_copy[i].getRuta());
-			}
+		if(agregar_ruta == false){
+			direcciones[i]=new Direccion();
+			direcciones[i].setRuta(vertices[point.getDesde_donde()].getId_vertice());
 		}
 		
-		return ejemplo;
-		
+		direcciones[i].setDistancia(point.getDistancia());
+		direcciones[i].setRuta(vertices[posicion_distancia_mas_baja].getId_vertice());
 	}
 	
-	public Direccion find_direccion(int id_vertice_origen, int id_vertice_destino, Direccion direcciones[]){
-		for(int i = 0; i < direcciones.length; i++){
-			if(direcciones[i].getLastRuta() == id_vertice_destino){
-				return direcciones[i];
+	public double lastDistanciaMinima(){
+		double last=0;
+		for(int i=0;i<direcciones.length;i++){
+			if(direcciones[i] != null)
+				last=direcciones[i].getDistancia();
+		}
+		return last;	
+	}
+	
+	public boolean existeId(int id){
+		boolean existe = false;
+		for(int fila = 0; fila < vertices.length; fila++){
+			if(vertices[fila].getId_vertice() == id){
+				existe = true;
 			}
 		}
-		return null;
+		return existe;
 	}
 	
 	public String toString_indices(){
@@ -183,11 +143,11 @@ public class Grafo {
 		return salida+"\n";	
 	}
 	
-	public String toString_grafo(){
+	public String toString_matriz_inicial(){
 		String salida="";
-		for(int i=0;i<matriz_adyacencia.length;i++){
-			for(int j=0;j<matriz_adyacencia.length;j++){
-					salida+="|"+matriz_adyacencia[i][j]+"|";
+		for(int i=0;i<matriz_inicial.length;i++){
+			for(int j=0;j<matriz_inicial.length;j++){
+					salida+="|"+matriz_inicial[i][j]+"|";
 			}
 			salida+="\n";
 		}
@@ -204,27 +164,24 @@ public class Grafo {
 	
 	public String toString_resultados(){
 		String salida="";
-		for(int i=0;i<resultados.length;i++){
-			for(int j=0;j<resultados.length;j++){
-					salida+="|"+ resultados[i][j].getDistancia()+"("+resultados[i][j].getDesde_donde()+")|";
+		if(resultados != null){
+			for(int i=0;i<resultados.length;i++){
+				for(int j=0;j<resultados.length+1;j++){
+						salida+="|"+ resultados[i][j].getDistancia()+"("+resultados[i][j].getDesde_donde()+")|";
+				}
+				salida+="\n";
 			}
-			salida+="\n";
 		}
 		return salida;	
 	}
 	
 	public String toString_direcciones(){
 		String salida="";
-		for(int i=0;i<direcciones.length;i++){
-			salida+="|"+direcciones[i].getDistancia()+"-"+direcciones[i].getRuta()+"|";
-		}
-		return salida+"\n";	
-	}
-	
-	public String toString_direcciones_copy(){
-		String salida="";
-		for(int i=0;i<direcciones_copy.length;i++){
-			salida+="|"+direcciones_copy[i].getDistancia()+"-"+direcciones_copy[i].getRuta()+"|";
+		if(direcciones != null){
+			for(int i=0;i<direcciones.length;i++){
+				if(direcciones[i] != null)
+					salida+="|"+direcciones[i].getDistancia()+" "+direcciones[i].getRuta()+"|";
+			}
 		}
 		return salida+"\n";	
 	}
