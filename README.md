@@ -1,6 +1,7 @@
 # Dijkstra_algoritmo
 
 ### Descripción
+
 Implementación del algoritmo de dijkstra para la búsqueda de la ruta más corta entre los vértices de un grafo. 
 
 ### Construcción / Modificación
