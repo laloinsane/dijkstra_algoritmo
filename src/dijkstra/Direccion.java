@@ -15,7 +15,7 @@ public class Direccion {
 		this.distancia_minima = distancia_minima;
 	}
 	
-	public ArrayList getRuta() {
+	public ArrayList<Integer> getRuta() {
 		return ruta;
 	}
 	
