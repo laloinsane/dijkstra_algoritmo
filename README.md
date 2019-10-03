@@ -4,6 +4,12 @@
 
 Implementación del algoritmo de dijkstra para la búsqueda de la ruta más corta entre los vértices de un grafo. 
 
+### Imágenes de demostración
+
+<img src="images/demo/demo_1.png">
+<img src="images/demo/demo_2.png">
+<img src="images/demo/demo_3.png">
+
 ### Construcción / Modificación
 
 ``` bash
