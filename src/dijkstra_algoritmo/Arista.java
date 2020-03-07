@@ -1,4 +1,4 @@
-package dijkstra;
+package dijkstra_algoritmo;
 
 public class Arista {
 	
