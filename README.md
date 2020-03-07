@@ -4,6 +4,10 @@
 
 Implementación del algoritmo de dijkstra para la búsqueda de la ruta más corta entre los vértices de un grafo. 
 
+### Requisitos
+
+Proyecto JAVA con ```JRE (Java Runtime Environment o, en español, el Entorno de Ejecución de Java) - J2SE-1.5```.
+
 ### Imágenes de demostración
 
 <img src="images/demo/demo_1.png">
